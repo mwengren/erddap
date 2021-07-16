@@ -96,9 +96,10 @@ since this is impossible for AWS S3 dependencies without Maven.
     </repositories>
 
     <build>
+        <sourceDirectory>${basedir}/WEB-INF/classes</sourceDirectory>
         <resources>
             <resource>
-                <directory>src/main/java</directory>
+                <directory>WEB-INF/classes</directory>
                 <includes>
                     <include>**/*.properties</include>
                     <include>**/*.csv</include>
@@ -143,9 +144,7 @@ since this is impossible for AWS S3 dependencies without Maven.
                         <exclude>gov/noaa/pfel/erddap/dataset/EDDTableFromNWISDV.javaINACTIVE</exclude>
                         <exclude>gov/noaa/pfel/erddap/dataset/EDDTableFromPostDatabase.javaINACTIVE</exclude>
                         <exclude>gov/noaa/pfel/erddap/dataset/EDDTableFromPostNcFiles.javaINACTIVE</exclude>
-                        
                         <exclude>gov/noaa/pfel/coastwatch/util/FileVisitorDNLS.javaOLD</exclude>
-
                     </excludes>
                 </configuration>
             </plugin>
@@ -155,6 +154,10 @@ since this is impossible for AWS S3 dependencies without Maven.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <configuration>
+                    <warSourceDirectory>.</warSourceDirectory>
+                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, public/**, target/**, .settings, pom.xml, README.md</warSourceExcludes>
+                </configuration>
             </plugin>
 
             <!-- NOT ACTIVE. See above and below.
