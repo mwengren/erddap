@@ -72,7 +72,7 @@ since this is impossible for AWS S3 dependencies without Maven.
     </repositories>
 
     <build>
-        <sourceDirectory>${basedir}/WEB-INF/classes</sourceDirectory>
+        <sourceDirectory>WEB-INF/classes</sourceDirectory>
         <resources>
             <resource>
                 <directory>WEB-INF/classes</directory>
@@ -131,7 +131,7 @@ since this is impossible for AWS S3 dependencies without Maven.
                 <version>3.3.1</version>
                 <configuration>
                     <warSourceDirectory>.</warSourceDirectory>
-                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, public/**, target/**, .settings, pom.xml, README.md</warSourceExcludes>
+                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, target/**, data/**, .settings/**, *.*</warSourceExcludes>
                 </configuration>
             </plugin>
 
