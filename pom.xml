@@ -193,6 +193,83 @@ since this is impossible for AWS S3 dependencies without Maven.
                     </execution>
                 </executions>
             </plugin> -->
+            
+            <!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-maven-plugin -->
+            <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.4.43.v20210629</version>
+            <!-- mvn jetty:run configuration:
+                the <configuration /> element below is an attempt to work with the mvn jetty:run goal, however it fails due to 
+                https://github.com/BobSimons/erddap/blob/b92ead9e1dd5e843514dd6b4bbf8af3fe0a74f1c/WEB-INF/classes/com/cohort/util/String2.java#L239, 
+                which requires that WEB-INF be part of the java classpath.  In the case of mvn jetty:run, classpath by default is:
+                ${project.basedir}/target/classes, which is separate from the <webAppSourceDirectory /> that contains WEB-INF 
+            -->
+            <!-- 
+            <configuration>
+                <scanIntervalSeconds>10</scanIntervalSeconds>
+                <webAppSourceDirectory>${project.basedir}</webAppSourceDirectory>
+                <webApp>
+                   <contextPath>/erddap</contextPath>
+                   <descriptor>${project.basedir}/WEB-INF/web.xml</descriptor>
+                   <baseResource>${project.basedir}</baseResource>
+                   <resourceBases>
+                       <resourceBase>${project.basedir}</resourceBase>
+                   </resourceBases>
+                </webApp>
+             </configuration>
+              -->
+             <!-- mvn jetty:run-exploded configuration
+                differs from the above in that it doesn't override the default <webAppSourceDirectory> location as Maven will have already built the web 
+                app in a standard layout under /target
+             <configuration>
+                <scanIntervalSeconds>10</scanIntervalSeconds>
+                <webApp>
+                   <contextPath>/erddap</contextPath>
+                </webApp>
+             </configuration>
+             -->
+             
+             <executions>
+                <execution>
+                  <id>run-exploded</id>
+                  <goals>
+                    <goal>run-exploded</goal>
+                  </goals>
+                  <!--<phase>package</phase>-->
+                  <inherited>false</inherited>
+                  <configuration>
+                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                    <reload>manual</reload>
+                    <dumpOnStart>true</dumpOnStart>
+                    <webApp>
+                       <contextPath>/erddap</contextPath>
+                    </webApp>
+                  </configuration>
+                </execution>
+                <execution>
+                  <id>run</id>
+                  <goals>
+                    <goal>run</goal>
+                  </goals>
+                  <!--<phase>package</phase>-->
+                  <inherited>false</inherited>
+                  <configuration>
+                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                    <reload>manual</reload>
+                    <dumpOnStart>true</dumpOnStart>
+                    <webAppSourceDirectory>${project.basedir}</webAppSourceDirectory>
+                    <webApp>
+                       <contextPath>/erddap</contextPath>
+                       <descriptor>${project.basedir}/WEB-INF/web.xml</descriptor>
+                       <resourceBases>
+                           <resourceBase>${project.basedir}</resourceBase>
+                       </resourceBases>
+                    </webApp>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
         </plugins>
         <pluginManagement>
           <plugins>
