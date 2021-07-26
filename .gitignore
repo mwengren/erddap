@@ -4,6 +4,8 @@ images/gadgets
 images/post
 *.class
 Thumbs.db
+/content/
+/data/
 /target/
 .classpath
 .project
