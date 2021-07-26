@@ -68,6 +68,7 @@ since this is impossible for AWS S3 dependencies without Maven.
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <erddap.release.version>v2.14</erddap.release.version>
     </properties>
 
     <repositories>
@@ -269,6 +270,59 @@ since this is impossible for AWS S3 dependencies without Maven.
                   </configuration>
                 </execution>
               </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>download-erddap-content</id>
+                        <phase>intializes</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="project.basedir" value="${project.basedir}"/>
+                                <property name="erddap.release.versionn" value="${erddap.release.version}"/>
+                                <echo message="project.basedir: ${project.basedir}"/>
+                                <echo message="erddap.release.version: ${erddap.release.version}"/>
+                                <get src="https://github.com/BobSimons/erddap/releases/download/${erddap.release.version}/erddapContent.zip" dest="${project.basedir}/erddapContent.zip" verbose="true"/>
+                                <unzip src="${project.basedir}/erddapContent.zip" dest="${project.basedir}" overwrite="false" />
+                                <delete file="${project.basedir}/erddapContent.zip"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-etopo</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="project.basedir" value="${project.basedir}"/>
+                                <echo message="project.basedir: ${project.basedir}"/>
+                                <get src="https://raw.githubusercontent.com/BobSimons/erddap/master/WEB-INF/ref/etopo1_ice_g_i2.bin" dest="${project.basedir}/WEB-INF/ref/etopo1_ice_g_i2.bin" verbose="true"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>make-data-dir</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <property name="project.basedir" value="${project.basedir}"/>
+                                <echo message="project.basedir: ${project.basedir}"/>
+                                <mkdir dir="${project.basedir}/data"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <pluginManagement>
