@@ -157,7 +157,7 @@ since this is impossible for AWS S3 dependencies without Maven.
                 <version>3.3.2</version>
                 <configuration>
                     <warSourceDirectory>.</warSourceDirectory>
-                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, target/**, data/**, .settings/**, *.*</warSourceExcludes>
+                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, target/**, data/**, content/**, .settings/**, *.*</warSourceExcludes>
                 </configuration>
             </plugin>
 
@@ -194,62 +194,66 @@ since this is impossible for AWS S3 dependencies without Maven.
                     </execution>
                 </executions>
             </plugin> -->
-            
+
             <!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-maven-plugin -->
             <plugin>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <version>9.4.43.v20210629</version>
-             <executions>
-                <!-- mvn jetty:run-exploded configuration:
-                    differs from mvn jetty:run in that it doesn't override the default <webAppSourceDirectory> location as Maven will 
-                    have already built the web app in a standard layout under /target which Jetty then uses as the 'exploded' source
-                -->
-                <execution>
-                  <id>run-exploded</id>
-                  <goals>
-                    <goal>run-exploded</goal>
-                  </goals>
-                  <!--<phase>package</phase>-->
-                  <inherited>false</inherited>
-                  <configuration>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.43.v20210629</version>
+                <!-- Apparently these settings need to be made at the plugin and not execution level, had been ignored when nested under an execution below -->
+                <configuration>
                     <scanIntervalSeconds>0</scanIntervalSeconds>
                     <reload>manual</reload>
                     <dumpOnStart>true</dumpOnStart>
-                    <webApp>
-                       <contextPath>/erddap</contextPath>
-                    </webApp>
-                  </configuration>
-                </execution>
-                <!-- mvn jetty:run configuration:
-                    this execution config is an attempt to work with the mvn jetty:run goal, however it fails due to 
-                    https://github.com/BobSimons/erddap/blob/b92ead9e1dd5e843514dd6b4bbf8af3fe0a74f1c/WEB-INF/classes/com/cohort/util/String2.java#L239, 
-                    which requires that WEB-INF be part of the Java classpath.  In the case of mvn jetty:run, classpath by default is:
-                    ${project.basedir}/target/classes, which is separate from the <webAppSourceDirectory> path that includes the WEB-INF dir 
-                -->
-                <execution>
-                  <id>run</id>
-                  <goals>
-                    <goal>run</goal>
-                  </goals>
-                  <!--<phase>package</phase>-->
-                  <inherited>false</inherited>
-                  <configuration>
-                    <scanIntervalSeconds>0</scanIntervalSeconds>
-                    <reload>manual</reload>
-                    <dumpOnStart>true</dumpOnStart>
-                    <webAppSourceDirectory>${project.basedir}</webAppSourceDirectory>
-                    <webApp>
-                       <contextPath>/erddap</contextPath>
-                       <descriptor>${project.basedir}/WEB-INF/web.xml</descriptor>
-                       <resourceBases>
-                           <resourceBase>${project.basedir}</resourceBase>
-                       </resourceBases>
-                    </webApp>
-                  </configuration>
-                </execution>
-              </executions>
+                </configuration>
+                <executions>
+                    <!-- mvn jetty:run-exploded configuration:
+                        differs from mvn jetty:run in that it doesn't override the default <webAppSourceDirectory> location as Maven will 
+                        have already built the web app in a standard layout under /target which Jetty then uses as the 'exploded' source
+                    -->
+                    <execution>
+                      <id>run-exploded</id>
+                      <goals>
+                        <goal>run-exploded</goal>
+                      </goals>
+                      <!--<phase>package</phase>-->
+                      <inherited>false</inherited>
+                      <configuration>
+                        <webApp>
+                           <contextPath>/erddap</contextPath>
+                        </webApp>
+                      </configuration>
+                    </execution>
+                    <!-- mvn jetty:run configuration:
+                        this execution config is an attempt to work with the mvn jetty:run goal, however it fails due to 
+                        https://github.com/BobSimons/erddap/blob/b92ead9e1dd5e843514dd6b4bbf8af3fe0a74f1c/WEB-INF/classes/com/cohort/util/String2.java#L239, 
+                        which requires that WEB-INF be part of the Java classpath.  In the case of mvn jetty:run, classpath by default is:
+                        ${project.basedir}/target/classes, which is separate from the <webAppSourceDirectory> path that includes the WEB-INF dir 
+                    -->
+                    <execution>
+                      <id>run</id>
+                      <goals>
+                        <goal>run</goal>
+                      </goals>
+                      <!--<phase>package</phase>-->
+                      <inherited>false</inherited>
+                      <configuration>
+                        <webAppSourceDirectory>${project.basedir}</webAppSourceDirectory>
+                        <webApp>
+                           <contextPath>/erddap</contextPath>
+                           <descriptor>${project.basedir}/WEB-INF/web.xml</descriptor>
+                           <!-- 
+                           <resourceBases>
+                               <resourceBase>${project.basedir}</resourceBase>
+                           </resourceBases>
+                           -->
+                        </webApp>
+                      </configuration>
+                    </execution>
+                </executions>
             </plugin>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-antrun-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -257,17 +261,13 @@ since this is impossible for AWS S3 dependencies without Maven.
                 <executions>
                     <execution>
                         <id>download-erddap-content</id>
-                        <phase>intializes</phase>
+                        <phase>initialize</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
                             <target>
-                                <property name="project.basedir" value="${project.basedir}"/>
-                                <property name="erddap.release.versionn" value="${erddap.release.version}"/>
-                                <echo message="project.basedir: ${project.basedir}"/>
-                                <echo message="erddap.release.version: ${erddap.release.version}"/>
-                                <get src="https://github.com/BobSimons/erddap/releases/download/${erddap.release.version}/erddapContent.zip" dest="${project.basedir}/erddapContent.zip" verbose="true"/>
+                                <get src="https://github.com/BobSimons/erddap/releases/download/${erddap.release.version}/erddapContent.zip" dest="${project.basedir}/erddapContent.zip" skipexisting="true" verbose="true"/>
                                 <unzip src="${project.basedir}/erddapContent.zip" dest="${project.basedir}" overwrite="false" />
                                 <delete file="${project.basedir}/erddapContent.zip"/>
                             </target>
@@ -281,9 +281,7 @@ since this is impossible for AWS S3 dependencies without Maven.
                         </goals>
                         <configuration>
                             <target>
-                                <property name="project.basedir" value="${project.basedir}"/>
-                                <echo message="project.basedir: ${project.basedir}"/>
-                                <get src="https://raw.githubusercontent.com/BobSimons/erddap/master/WEB-INF/ref/etopo1_ice_g_i2.bin" dest="${project.basedir}/WEB-INF/ref/etopo1_ice_g_i2.bin" verbose="true"/>
+                                <get src="https://github.com/BobSimons/erddap/raw/master/WEB-INF/ref/etopo1_ice_g_i2.bin" dest="${project.basedir}/WEB-INF/ref/etopo1_ice_g_i2.bin" skipexisting="true" verbose="true"/>
                             </target>
                         </configuration>
                     </execution>
@@ -295,8 +293,6 @@ since this is impossible for AWS S3 dependencies without Maven.
                         </goals>
                         <configuration>
                             <target>
-                                <property name="project.basedir" value="${project.basedir}"/>
-                                <echo message="project.basedir: ${project.basedir}"/>
                                 <mkdir dir="${project.basedir}/data"/>
                             </target>
                         </configuration>
