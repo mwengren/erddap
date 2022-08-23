@@ -96,9 +96,10 @@ since this is impossible for AWS S3 dependencies without Maven.
     </repositories>
 
     <build>
+        <sourceDirectory>WEB-INF/classes</sourceDirectory>
         <resources>
             <resource>
-                <directory>src/main/java</directory>
+                <directory>WEB-INF/classes</directory>
                 <includes>
                     <include>**/*.properties</include>
                     <include>**/*.csv</include>
@@ -143,9 +144,7 @@ since this is impossible for AWS S3 dependencies without Maven.
                         <exclude>gov/noaa/pfel/erddap/dataset/EDDTableFromNWISDV.javaINACTIVE</exclude>
                         <exclude>gov/noaa/pfel/erddap/dataset/EDDTableFromPostDatabase.javaINACTIVE</exclude>
                         <exclude>gov/noaa/pfel/erddap/dataset/EDDTableFromPostNcFiles.javaINACTIVE</exclude>
-                        
                         <exclude>gov/noaa/pfel/coastwatch/util/FileVisitorDNLS.javaOLD</exclude>
-
                     </excludes>
                 </configuration>
             </plugin>
@@ -155,6 +154,10 @@ since this is impossible for AWS S3 dependencies without Maven.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <configuration>
+                    <warSourceDirectory>${project.basedir}</warSourceDirectory>
+                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, target/**, data/**, content/**, .settings/**, *.*</warSourceExcludes>
+                </configuration>
             </plugin>
 
             <!-- NOT ACTIVE. See above and below.
@@ -419,7 +422,7 @@ since this is impossible for AWS S3 dependencies without Maven.
             <artifactId>netcdfAll</artifactId>
             <version>5.5.3</version>
             <scope>system</scope>
-            <systemPath>C:/programs/mavenERDDAP/ERDDAP/repo/edu/ucar/netcdfAll/5.5.3/netcdfAll-5.5.3.jar</systemPath> <!-- gets WARNING about absolute path, but okay -->
+            <systemPath>${erddap.github.dir}/WEB-INF/lib/netcdfAll-5.5.3.jar</systemPath>
         </dependency>
 
         <!-- These will be needed if I ever switch away from netcdfAll.

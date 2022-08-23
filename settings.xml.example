@@ -1,0 +1,26 @@
+<!-- Put this file in the ${user.home}/.m2 directory, user-specific settings for Maven per: https://maven.apache.org/settings.html -->
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <localRepository/>
+  <interactiveMode/>
+  <usePluginRegistry/>
+  <offline/>
+  <pluginGroups/>
+  <servers/>
+  <mirrors/>
+  <proxies/>
+  <profiles>
+    <profile>
+        <id>erddap-build-profile</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <erddap.github.dir>/path/to/local/clone/of/BobSimons/erddap</erddap.github.dir>
+        </properties>
+    </profile>
+  </profiles>
+  </activeProfiles>
+</settings>
