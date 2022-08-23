@@ -212,17 +212,17 @@ since this is impossible for AWS S3 dependencies without Maven.
                         have already built the web app in a standard layout under /target which Jetty then uses as the 'exploded' source
                     -->
                     <execution>
-                      <id>run-exploded</id>
-                      <goals>
-                        <goal>run-exploded</goal>
-                      </goals>
-                      <!--<phase>package</phase>-->
-                      <inherited>false</inherited>
-                      <configuration>
-                        <webApp>
-                           <contextPath>/erddap</contextPath>
-                        </webApp>
-                      </configuration>
+                        <id>run-exploded</id>
+                        <goals>
+                            <goal>run-exploded</goal>
+                        </goals>
+                        <!--<phase>package</phase>-->
+                        <inherited>false</inherited>
+                        <configuration>
+                            <webApp>
+                               <contextPath>/erddap</contextPath>
+                            </webApp>
+                        </configuration>
                     </execution>
                     <!-- mvn jetty:run configuration:
                         this execution config is an attempt to work with the mvn jetty:run goal, however it fails due to 
@@ -231,24 +231,24 @@ since this is impossible for AWS S3 dependencies without Maven.
                         ${project.basedir}/target/classes, which is separate from the <webAppSourceDirectory> path that includes the WEB-INF dir 
                     -->
                     <execution>
-                      <id>run</id>
-                      <goals>
-                        <goal>run</goal>
-                      </goals>
-                      <!--<phase>package</phase>-->
-                      <inherited>false</inherited>
-                      <configuration>
-                        <webAppSourceDirectory>${project.basedir}</webAppSourceDirectory>
-                        <webApp>
-                           <contextPath>/erddap</contextPath>
-                           <descriptor>${project.basedir}/WEB-INF/web.xml</descriptor>
-                           <!-- 
-                           <resourceBases>
-                               <resourceBase>${project.basedir}</resourceBase>
-                           </resourceBases>
-                           -->
-                        </webApp>
-                      </configuration>
+                        <id>run</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <!--<phase>package</phase>-->
+                        <inherited>false</inherited>
+                        <configuration>
+                            <webAppSourceDirectory>${project.basedir}</webAppSourceDirectory>
+                            <webApp>
+                                <contextPath>/erddap</contextPath>
+                                <descriptor>${project.basedir}/WEB-INF/web.xml</descriptor>
+                                <!--
+                                <resourceBases>
+                                   <resourceBase>${project.basedir}</resourceBase>
+                                </resourceBases>
+                                -->
+                            </webApp>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
