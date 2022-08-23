@@ -157,7 +157,7 @@ since this is impossible for AWS S3 dependencies without Maven.
                 <version>3.3.2</version>
                 <configuration>
                     <warSourceDirectory>.</warSourceDirectory>
-                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, target/**, data/**, content/**, .settings/**, *.*</warSourceExcludes>
+                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, target/**, data/**, content/**, *.*</warSourceExcludes>
                 </configuration>
             </plugin>
 
