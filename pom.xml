@@ -100,14 +100,6 @@ since this is impossible for AWS S3 dependencies without Maven.
         <resources>
             <resource>
                 <directory>WEB-INF/classes</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.csv</include>
-                    <include>**/*.tsv</include>
-                    <include>**/*.txt</include>
-                    <include>**/*.cpt</include>
-                    <include>**/*.xml</include>
-                </includes>
             </resource>
         </resources>
         <plugins>
@@ -156,7 +148,7 @@ since this is impossible for AWS S3 dependencies without Maven.
                 <version>3.3.2</version>
                 <configuration>
                     <warSourceDirectory>${project.basedir}</warSourceDirectory>
-                    <warSourceExcludes>WEB-INF/lib/**, WEB-INF/classes/**, target/**, data/**, content/**, .settings/**, *.*</warSourceExcludes>
+                    <warSourceExcludes>WEB-INF/lib/**, target/**, data/**, content/**, .settings/**, *.*</warSourceExcludes>
                 </configuration>
             </plugin>
 
