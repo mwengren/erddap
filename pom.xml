@@ -417,7 +417,7 @@ since this is impossible for AWS S3 dependencies without Maven.
             <artifactId>netcdfAll</artifactId>
             <version>5.5.3</version>  <!-- version number duplicated several times below -->
             <scope>system</scope>
-            <systemPath>${project.basedir}/WEB-INF/lib/netcdfAll-5.5.3.jar</systemPath>
+            <systemPath>${erddap.github.dir}/WEB-INF/lib/netcdfAll-5.5.3.jar</systemPath>
         </dependency>
 
         <!-- These will be needed if I ever switch away from netcdfAll.
